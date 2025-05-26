@@ -45,35 +45,49 @@ const formsSchema = yup.object({
 
 export default function FormValidate() {
 
-  
+
   const {register, handleSubmit, formState: {errors}} = useForm({
     resolver: yupResolver(formsSchema)
   });
 
 
+  const submitForm = (data) => {
+    console.log(data)
+  }
+
 
   return (
-    <>
-      <form>
-        <label htmlFor='fullName'>
+  
+      <form onSubmit={handleSubmit(submitForm)}>
+        <div>
+          <label htmlFor='fullName'>
           Nome Completo <span>(obrigatório)</span>
         </label>
-        <input type='text' id='fullName'  />
+        <input type='text' id='fullName' {...register('fullName')}  />
+        <p>{errors.fullName?.message} </p>
+        </div>
 
-        <label htmlFor='email'>
+        <div>
+          <label htmlFor='email'>
           E-mail <span>(obrigatório)</span>
         </label>
-        <input type='email' id='email' />
+        <input type='email' id='email' {...register('email')} />
+        <p>{errors.email?.message} </p>
+        </div>
 
-        <label htmlFor='tell'>
+        <div>
+          <label htmlFor='tell'>
           Telefone <span>(obrigatório)</span>
         </label>
-        <input type='tell' id='tell' />
+        <input type='tell' id='tell' {...register('tell')} />
+        <p>{errors.tell?.message} </p>
+        </div>
 
-        <label htmlFor='cargo'>
+        <div>
+          <label htmlFor='cargo'>
           Cargo pretendido <span>(obrigatório)</span>
         </label>
-        <select name='cargo-pretendido' id='cargo'>
+        <select name='position' id='position' {...register('position')}>
           <option value='Desenvolvedor Frontend'>Desenvolvedor Frontend</option>
           <option value='Desenvolvedor Backend'>Desenvolvedor Backend</option>
           <option value='Desenvolvedor Full Stack'>Desenvolvedor Full Stack</option>
@@ -90,16 +104,27 @@ export default function FormValidate() {
           <option value='Scrum Master'>Scrum Master</option>
           <option value='Product Owner'>Product Owner</option>
         </select>
-        <label htmlFor='Linkdin'>
+        <p>{errors.position?.message} </p>
+        </div>
+
+        <div>
+            <label htmlFor='linkdin'>
           Linkdin <span>(opcional)</span>
         </label>
-        <input type='text' id='github' />
-        <label htmlFor='github'>
+        <input type='text' id='linkdin' {...register('linkdin')} />
+       <p>{errors.linkdin?.message} </p>
+        </div>
+       
+        <div>
+          <label htmlFor='github'>
           Github <span>(opcional)</span>
         </label>
-        <input type='text' id='Github' />
-        <button>Cadastrar</button>
+        <input type='text' id='github' {...register('github')} />
+         <p>{errors.github?.message} </p>
+        </div>
+
+        <button type='submit'>Cadastrar</button>
       </form>
-    </>
+    
   );
 }
