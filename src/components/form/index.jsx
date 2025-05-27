@@ -45,11 +45,9 @@ const formsSchema = yup.object({
 
 export default function FormValidate() {
 
-
   const {register, handleSubmit, formState: {errors}} = useForm({
     resolver: yupResolver(formsSchema)
   });
-
 
   const submitForm = (data) => {
     console.log(data)
