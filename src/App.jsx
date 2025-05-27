@@ -5,9 +5,7 @@ import FormValidate from './components/form';
 function App() {
 
   return (
-    <>
       <FormValidate/>
-    </>
   );
 }
 
