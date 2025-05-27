@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -7,7 +8,7 @@ const formsSchema = yup.object({
      email: yup.string().email('Email invalido.')
      .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "email invalido")
      .required('Informe seu email'),
-     tell: yup.number()
+     tell: yup.string()
      .matches(/^\(?\d{2}\)?[\s-]?\d{4,5}-?\d{4}$/, "Telefone inválido")
      .required('Informe seu invalido'),
      position: yup
@@ -49,9 +50,22 @@ export default function FormValidate() {
     resolver: yupResolver(formsSchema)
   });
 
+
+  const [formSubmitSms, setFormSubmitSms] = useState('');
+
   const submitForm = (data) => {
-    console.log(data)
+    const existingData = JSON.parse(localStorage.getItem('frontendFusinMembers')) || [];
+    const updated = [...existingData, data];
+    localStorage.setItem('frontendFusinMembers', JSON.stringify(updated))
+
+    if(!data) {
+      setFormSubmitSms('Falha ao cadastrar.')
+    }else{
+       setFormSubmitSms('Cadastro realizado com sucesso!')
+    }
+   
   }
+
 
 
   return (
@@ -69,7 +83,7 @@ export default function FormValidate() {
           <label htmlFor='email'>
           E-mail <span>(obrigatório)</span>
         </label>
-        <input type='email' id='email' {...register('email')} />
+        <input type='text' id='email' {...register('email')} />
         <p>{errors.email?.message} </p>
         </div>
 
@@ -82,10 +96,11 @@ export default function FormValidate() {
         </div>
 
         <div>
-          <label htmlFor='cargo'>
+          <label htmlFor='position'>
           Cargo pretendido <span>(obrigatório)</span>
         </label>
         <select name='position' id='position' {...register('position')}>
+          <option value='' disabled selected>Escolha cargo pretendido</option>
           <option value='Desenvolvedor Frontend'>Desenvolvedor Frontend</option>
           <option value='Desenvolvedor Backend'>Desenvolvedor Backend</option>
           <option value='Desenvolvedor Full Stack'>Desenvolvedor Full Stack</option>
@@ -119,6 +134,10 @@ export default function FormValidate() {
         </label>
         <input type='text' id='github' {...register('github')} />
          <p>{errors.github?.message} </p>
+        </div>
+
+        <div>
+           <p>{formSubmitSms}</p>
         </div>
 
         <button type='submit'>Cadastrar</button>
